@@ -1,4 +1,3 @@
-
 ---
 --- LAZY.NVIM BOOTSTRAPPER
 ---
@@ -72,6 +71,7 @@ require("lazy").setup({
 			config = function()
 				vim.g.everforest_background = 'hard'
 				vim.g.everforest_enable_italic = 1
+				vim.g.everforest_transparent_background = 1
 				vim.cmd.colorscheme("everforest")
 			end,
 		},
@@ -332,7 +332,8 @@ vim.api.nvim_set_keymap('i', '<C-Space>', '<C-x><C-o>', { noremap = true, silent
 -- Terminal-mode Keybinds
 vim.api.nvim_set_keymap('t', '<C-Esc>', [[<C-\><C-n>]], { noremap = true, silent = true }) -- ESCAPE
 vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], { silent = true })
-
+-- Rename Symbols
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'LSP rename' })
 --
 -- LSP
 --

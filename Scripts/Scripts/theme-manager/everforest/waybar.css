@@ -1,0 +1,8 @@
+/* EVERFOREST */
+@define-color background alpha(#1E2326, 1);
+@define-color selected #ede3ce;
+@define-color dull alpha(#374145, 1);
+@define-color foreground #D3C6AA;
+@define-color secondary #9DA9A0;
+@define-color secondary-dull #859289;
+@define-color danger #46cF48;

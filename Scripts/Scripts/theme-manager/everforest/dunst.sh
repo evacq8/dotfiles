@@ -1,0 +1,4 @@
+export DUNST_BG="#1E2326"
+export DUNST_FG="#D3C6AA"
+export DUNST_DANGER_BG="#463F48"
+export DUNST_DANGER_FG="#E67E80"

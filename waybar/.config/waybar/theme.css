@@ -1,0 +1,8 @@
+/* LIMBO */
+@define-color background alpha(#000000, 1);
+@define-color selected #ffffff;
+@define-color dull alpha(#1a1a1a, 1);
+@define-color foreground #c7c7c7;
+@define-color secondary #959595;
+@define-color secondary-dull #646464;
+@define-color danger #525252;

@@ -1,0 +1,268 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 30, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // "margin-left": 6,
+    // "margin-right": 6,
+    // "margin-top": 5,
+    // Choose the order of the modules
+    "modules-left": [
+		"custom/nvidia",
+        "cpu",
+        "memory",
+        "temperature",
+        "sway/workspaces",
+        // "sway/mode",
+        "sway/scratchpad"
+    ],
+    "modules-center": [
+        // "sway/window",
+        "custom/playerlogo",
+        "group/playerctl",
+        "custom/divider",
+        "group/clock",
+        "custom/clocklogo"
+        // "clock"
+    ],
+    "modules-right": [
+		// "custom/keyboard-layout",
+        // "idle_inhibitor",
+    	//    "custom/weather",
+        "pulseaudio",
+        // "pulseaudio#microphone",
+        "network",
+        // "power-profiles-daemon",
+        "backlight",
+        "keyboard-state",
+        // "sway/language",
+        "battery",
+        "battery#bat2",
+        "tray",
+    ],
+    "group/playerctl": {
+		"orientation": "orthogonal",
+		"modules": [
+			"custom/playerlabel",
+            "custom/playerartist"
+		]
+	},
+    "group/clock": {
+		"orientation": "orthogonal",
+		"modules": [
+			"custom/clocktime",
+            "custom/clockdate"
+		]
+	},
+   "custom/playerlabel": {
+        "format": "{}",
+        "return-type": "json",
+        "max-length": 45,
+        "exec": "bash ~/Scripts/waybar/media.sh -songname",
+        "interval": 1,
+        "on-scroll-down": "playerctl previous",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+		"signal": 6
+    },
+    "custom/playerartist": {
+        "format": "{}",
+        "return-type": "json",
+        "max-length": 45,
+        "exec": "bash ~/Scripts/waybar/media.sh -artistname",
+        "tooltip": false,
+        "interval": 1,
+		"signal": 6
+    },
+    "custom/playerlogo": {
+        "format": "{}",
+        "return-type": "json",
+        "max-length": 45,
+        "exec": "bash ~/Scripts/waybar/media.sh -icon",
+        "tooltip": false,
+        "interval": 1,
+		"signal": 6
+    },
+    "custom/clocktime": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "bash ~/Scripts/waybar/clock.sh --time",
+        "interval": 1
+    },
+    "custom/clockdate": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "bash ~/Scripts/waybar/clock.sh --date",
+        "interval": 1
+    },
+    "custom/clocklogo": {
+        "format": ""
+    },
+    "custom/divider": {
+        "format": "⛤",
+        "tooltip": false
+    },
+    // Modules configuration
+    "sway/workspaces": {
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "I",
+            "2": "II",
+            "3": "III",
+            "4": "IV",
+            "5": "V",
+            "6": "VI",
+            "7": "VII",
+            "8": "VIII",
+            "9": "IX",
+            "10": "X"
+        }
+    },
+    "sway/mode": {
+        "format": " Resizing",
+        "tooltip": false
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        // "format-alt": "{:%Y-%m-%d}",
+        "interval": 1,
+        "format": " {:%a, %b %e %H:%M.%S}",
+        "format-alt": "<span color=\"#646464\"> </span>"
+    },
+    "cpu": {
+        "format": "\uF2DB {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": " {}%"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "interval": 10
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": " <span bgcolor=\"#393939\" rise=\"3pt\" size=\"50%\">{icon}</span>",
+        // "format-alt": " {percent}%",
+        // "format-icons": ["", "", "", "", "", "", "", "", ""],
+        "on-scroll-up": "brightnessctl s +5% && bash ~/Scripts/change_brightness.sh",
+        "on-scroll-down": "brightnessctl s 5%- && bash ~/Scripts/change_brightness.sh",
+        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+        "tooltip": true,
+        "tooltip-format": "brightness {percent}%"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": " {icon} {capacity}%",
+        // "format-alt": "{icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""],
+        "interval": 1
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": " <span bgcolor=\"#393939\" rise=\"3pt\" size=\"50%\">{icon}</span>",
+        "format-ethernet": "ether {ipaddr}/{cidr}",
+        "tooltip-format": "wifi name: {essid}",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": " offline",
+        // "format-alt": "",
+        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+    },
+    "pulseaudio": {
+         "scroll-step": 1, // %, can be a float
+         "format": "{icon} {volume}%",
+         "format-bluetooth": "{volume}% {icon} {format_source}",
+         "format-bluetooth-muted": " {icon} {format_source}",
+         "format-muted": "<span color=\"#646464\"> mute</span>",
+         "format-source": "{volume}% ",
+         "format-source-muted": "",
+         "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+    	  "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pamixer --toggle-mute && bash ~/Scripts/change_volume.sh -t",
+        "on-click-middle": "pavucontrol",
+        "on-scroll-up": "pamixer -i 5 && bash ~/Scripts/change_volume.sh",
+        "on-scroll-down": "pamixer -d 5 && bash ~/Scripts/change_volume.sh"
+    },
+}

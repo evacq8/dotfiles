@@ -1,0 +1,218 @@
+@import "theme.css";
+
+* {
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 15px;
+}
+
+window#waybar {
+    background-color: @background;
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+    color: @selected;
+    transition-property: background-color;
+    transition-duration: .5s;
+    /* box-shadow: 5px; */
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each button name */
+    border: none;
+}
+
+#tray menu {
+    background-color: @background;
+    color: @foreground;
+    border: solid 2px @dull;
+    padding: 16px;
+}
+
+#tray menu menuitem:hover {
+    color: @selected;
+    background: @dull;
+}
+
+tooltip {
+    background-color: @background;
+    border: solid 2px @dull;
+}
+
+tooltip label {
+    color: @secondary;
+    padding: 10px;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    background-color: transparent;
+    color: @secondary-dull;
+    border-radius: 4px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border: 1px;
+    border-style: solid;
+    border-color: transparent;
+    transition-property: letter-spacing, color;
+    transition-duration: 0.2s;
+
+    letter-spacing: -2px;
+    font-weight: 500;
+    font-style: italic;
+}
+
+#workspaces button:hover {
+    background: @dull;
+    font-weight: 300;
+}
+
+#workspaces button.focused {
+    transition-property: letter-spacing, color;
+    transition-duration: 0.2s;
+    color: @selected;
+
+    letter-spacing: 0px;
+    font-style: italic;
+}
+
+#workspaces button.urgent {
+    color: @selected;
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#mode {
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-timing-function: steps(30);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#custom-nvidia,
+#custom-pipewire,
+#custom-keyboard-layout,
+#clock,
+#battery,
+#cpu,
+#custom-playerlogo,
+#custom-clocklogo,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#custom-playerlabel,
+#custom-playerartist,
+#custom-clocktime,
+#custom-clockdate,
+#custom-weather,
+#custom-dunst,
+#mpd {
+    padding: 0 10px;
+    color: @foreground;
+    /*border-radius: 4px;*/
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#custom-pipewire {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+
+#scratchpad {
+    color: @secondary-dull;
+}
+
+#custom-divider {
+    color: @secondary-dull;
+    font-size: 20;
+    margin-top: -7px;
+    margin-left: 6px;
+}
+
+#custom-divider:hover {
+    color: @selected;
+    text-decoration: underline;
+    margin-top: -10px;
+    transition: margin-top 0.1s ease;
+}
+
+#custom-playerartist, #custom-clockdate {
+    margin-top: -6px;
+    font-size: 11px;
+    font-style: italic;
+    color: @secondary;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+#custom-playerlabel, #custom-clocktime {
+    font-size: 15px;
+    margin-top: 0px;
+}
+
+#custom-playerlabel:hover {
+    color: @selected;
+    font-weight:500;
+}
+
+#custom-clocktime, #custom-clockdate {
+    margin-right: -15px;
+}
+
+#custom-playerlogo, #custom-clocklogo {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#window,
+#workspaces {
+    margin: 0 4px;
+}
+
+#network.disconnected {
+    color: @secondary;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+@keyframes blink {
+    to {
+        color: @danger;
+    }
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    color: @selected;
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-timing-function: steps(30);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
