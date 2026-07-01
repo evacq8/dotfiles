@@ -1,36 +1,58 @@
 #!/bin/bash
 
-# Directory containing wallpapers
+# echo message for terminal and send notification
+toast() {
+	echo "wallpaper.sh: $1 $2"
+	notify-send "wallpaper.sh: $1" "$2"
+}
+
+# directory containing wallpapers
 WALLPAPER_DIR="$HOME/wallpapers"
 
-# Temporary file to store the index of the current wallpaper
-INDEX_FILE="$HOME/.local/bin/wallpaper_index"
+# file to keep track of wallpaper index
+INDEX_FILE="$WALLPAPER_DIR/.wallpaper_index"
+# file to read to get current theme
+THEME_FILE="$HOME/.current_theme"
+# check if theme file exists
+if [ ! -f "$THEME_FILE" ]; then
+	toast "Can't find current theme." "$THEME_FILE doesn't exist."
+	exit 1
+fi
+THEME=$(cat "$THEME_FILE")
 
-# Get the list of wallpapers in the directory
-WALLPAPERS=("$WALLPAPER_DIR"/*)
+# check if theme-specific directory ($WALLPAPER_DIR/$THEME) exists
+if [ ! -d "$WALLPAPER_DIR/$THEME" ]; then
+	toast "Can't find $THEME wallpaper directory." "Please create $WALLPAPER_DIR/$THEME and put your wallpapers in there."
+	exit 1
+fi
 
-# Check if the file exists; if not, initialize it with index 0
+# get the list of wallpapers for this theme
+WALLPAPERS=("$WALLPAPER_DIR/$THEME"/*)
+# make sure it isn't empty
+if [ ! -e "${WALLPAPERS[0]}" ]; then
+    toast "$THEME wallpaper folder empty." "Please add wallpaper images inside $WALLPAPER_DIR/$THEME"
+    exit 1
+fi
+
+# check if INDEX_FILE exists. if not, create one
 if [ ! -f "$INDEX_FILE" ]; then 
     echo 0 > "$INDEX_FILE"
 fi
+INDEX=$(cat "$INDEX_FILE")
 
-# Read the current index from the file
-CURRENT_INDEX=$(cat "$INDEX_FILE")
-
-# Check for the --refresh argument
+# --refresh argument means set the background without incrementing or notification
 if [ "$1" == "--refresh" ]; then
-    # Reapply the current wallpaper without modifying the index
-    swaymsg output "*" bg "${WALLPAPERS[$CURRENT_INDEX]}" fill
+    swaymsg output "*" bg "${WALLPAPERS[$INDEX]}" fill
     exit 0
 fi
 
-# Increment the index, cycling back to 0 if it exceeds the number of wallpapers
-NEXT_INDEX=$(( (CURRENT_INDEX + 1) % ${#WALLPAPERS[@]} ))
+# increment the index and cycle back if it reaches the end
+NEXT_INDEX=$(( (INDEX + 1) % ${#WALLPAPERS[@]} ))
 
-# Set the next wallpaper
+# set the next wallpaper 
 swaymsg output "*" bg "${WALLPAPERS[$NEXT_INDEX]}" fill
-dunstify -h string:x-dunst-stack-tag:wallpaper "Wallpaper Changed" "$(basename "${WALLPAPERS[$NEXT_INDEX]}")"
+toast "Wallpaper updated." "$(basename "${WALLPAPERS[$NEXT_INDEX]}")"
 
-# Save the new index to the file
+# save the new index to the file
 echo "$NEXT_INDEX" > "$INDEX_FILE"
 

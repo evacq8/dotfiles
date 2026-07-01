@@ -8,6 +8,9 @@ fi
 
 THEME=$1
 THEME_DIR="$HOME/Scripts/theme-manager/$THEME"
+CURRENT_THEME_FILE_PATH="$HOME/.current_theme"
+
+WALLPAPER_SCRIPT="$HOME/Scripts/wallpaper.sh"
 
 # Check if the theme directory exists in THEME_DIR
 if [ ! -d "$THEME_DIR" ]; then
@@ -16,6 +19,10 @@ if [ ! -d "$THEME_DIR" ]; then
 fi
 
 echo "Switching to theme: $THEME..."
+# Update current theme file
+echo "$THEME" > "$CURRENT_THEME_FILE_PATH"
+# Update wallpaper
+bash "$WALLPAPER_SCRIPT"
 
 # KITTY
 if [ -f "$THEME_DIR/kitty.conf" ]; then
@@ -44,7 +51,7 @@ if [ -f "$THEME_DIR/dunst.sh" ]; then
 		-e "s|__FOREGROUND__|$DUNST_FG|g" \
 		-e "s|__BACKGROUNDDANGER__|$DUNST_DANGER_BG|g" \
 		-e "s|__FOREGROUNDDANGER__|$DUNST_DANGER_FG|g" \
-		~/.config/dunst/dunstrc.template > ~/.config/dunst/dunstrc
+		$HOME/.config/dunst/dunstrc.template > $HOME/.config/dunst/dunstrc
 	killall dunst && dunst &>/dev/null &
 	echo "Dunst done."
 fi

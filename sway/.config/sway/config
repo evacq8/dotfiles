@@ -75,6 +75,7 @@ exec_always --no-startup-id bash ~/Scripts/wallpaper.sh --refresh
 # Read `man 5 sway-input` for more information about this section.
 
 exec bash ~/Scripts/battery_warnings.sh
+exec bash ~/Scripts/temperature_warning.sh
 exec /usr/lib/xfce-polkit/xfce-polkit
 exec bash ~/Scripts/break_reminder.sh
 
@@ -287,7 +288,7 @@ client.focused_inactive #000000 #000000 #000000
 client.unfocused #000000 #000000 #5D5D5D #ffffff
 client.urgent #000000 #000000 #ff0000 #ffffff
 
-default_border pixel 1
+default_border pixel 0
 smart_borders on
 
 gaps inner 14

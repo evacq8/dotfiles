@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define directories
-DIRS="/usr/share/applications $HOME/.local/share/applications"
+DIRS="/usr/share/applications $HOME/.local/share/applications /var/lib/flatpak/exports/share/applications"
 
 # Generate a list of "Display Name | Filename"
 # Use awk to extract the name and append the filename at the end so we can launch it later

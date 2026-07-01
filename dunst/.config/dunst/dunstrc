@@ -10,7 +10,7 @@
     scale = 0
     notification_limit = 20
     progress_bar = true
-    highlight = "#AAAAAA"
+    highlight = "#cdd6f4"
     progress_bar_height = 5
     progress_bar_frame_width = 0
     progress_bar_min_width = 150
@@ -26,7 +26,7 @@
     horizontal_padding = 8
     text_icon_padding = 0
     frame_width = 1
-    frame_color = "#AAAAAA" 
+    frame_color = "#cdd6f4" 
     gap_size = 0
     separator_color = frame
     sort = yes
@@ -77,19 +77,19 @@
     per_monitor_dpi = false
 
 [urgency_low]
-    background = "#000000"
-    foreground = "#AAAAAA"
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
     timeout = 10
 
 [urgency_normal]
-    background = "#000000"
-    foreground = "#AAAAAA"
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
     timeout = 10
     override_pause_level = 30
 
 [urgency_critical]
-    background = "#463F48"
-    foreground = "#E67E80"
-    frame_color = "#E67E80"
+    background = "#181825"
+    foreground = "#eba0ac"
+    frame_color = "#eba0ac"
     timeout = 0
     override_pause_level = 60

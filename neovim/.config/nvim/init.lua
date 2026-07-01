@@ -80,13 +80,13 @@ require("lazy").setup({
 			commit = "87c857a",
 			config = function()
 				require("presence").setup({
-					neovim_image_text = "Neovim",
+					neovim_image_text = "NEOVIM",
 					main_image = "file",
 					show_time = true,
 
-					editing_text = "Editing %s",
-					file_explorer_text = "Browsing",
-					workspace_text = "Repo %s"
+					editing_text = "editing %s",
+					file_explorer_text = "browsing...",
+					workspace_text = "repository: %s"
 				})
 			end
 		},
@@ -106,14 +106,67 @@ require("lazy").setup({
 				})
 			end
 		},
+		{ "mason-org/mason.nvim", opts = {} },
   	},
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = false },
 })
 
+---
+--- LSP
+---
+
+local lsp_servers = { "lua_ls", "clangd", "pyright", "luau_lsp", "rust_analyzer" }
+local lsp_server_overrides = {
+	["lua_ls"] = {
+		settings = {
+			Lua = {
+				diagnostics = { globals = {"vim"} },
+			},
+		},
+	},
+	["luau_lsp"] = {
+		cmd = {
+            "luau-lsp",
+            "lsp",
+            "--definitions=globalTypes.d.luau",
+        },
+		settings = {
+			luau = {
+				sourcemap = {
+					enabled=true,
+					autogenerate = false,
+					rojoProjectFile = "default.project.json",
+				},
+				completion = {
+					imports = { enabled = true },
+				},
+				diagnostics = {
+					strictDatamodelTypes = true,
+				}
+			}
+		}
+	}
+}
+for _, server in ipairs(lsp_servers) do
+	local opts = lsp_server_overrides[server] or {}
+	vim.lsp.config(server, opts)
+	vim.lsp.enable(server)
+end
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        local bufnr = args.buf
+        -- Sets the omnifunc to use LSP completion
+        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+        -- Optional: Move your Rename and Diagnostics keybinds here 
+        -- so they only exist when an LSP is actually active!
+        local opts = { buffer = bufnr }
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    end,
+})
 
 ---
 --- OTHER CONFIG
@@ -333,44 +386,7 @@ vim.api.nvim_set_keymap('i', '<C-Space>', '<C-x><C-o>', { noremap = true, silent
 vim.api.nvim_set_keymap('t', '<C-Esc>', [[<C-\><C-n>]], { noremap = true, silent = true }) -- ESCAPE
 vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], { silent = true })
 -- Rename Symbols
-vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'LSP rename' })
---
--- LSP
---
-local function lsp_enable(name, config)
-	local cfg = config or vim.lsp.config[name]
-	if cfg and cfg.cmd and vim.fn.executable(cfg.cmd[1]) == 1 then
-        if config then vim.lsp.config(name, config) end
-        vim.lsp.enable(name)
-    else
-        print("LSP: " .. name .. " binary not found. Skipping...")
-    end
-end
-lsp_enable("clangd") -- C and C++
-lsp_enable("pyright") -- Python
--- Lua
-Lsp_lua_config = {
-  cmd = { "lua-language-server" },
-  filetypes = { "lua" },
-  settings = {
-    Lua = {
-      runtime = { version = "LuaJIT" },
-      diagnostics = { globals = { "vim" } },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      telemetry = { enable = false },
-    },
-  },
-}
-lsp_enable("lua_ls", Lsp_lua_config)
--- Javascript & Typescript
-Lsp_ts_config = {
-  cmd = { "typescript-language-server", "--stdio" },
-  filetypes = { "typescript", "javascript" },
-}
-lsp_enable("tsserver", Lsp_ts_config)
+--vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = 'LSP rename' })
 --
 -- DIAGNOSTICS
 --
